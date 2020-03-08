@@ -1,0 +1,25 @@
+##
+## EPITECH PROJECT, 2020
+## libjzon
+## File description:
+## This file describes the project's dependencies and allowed functions.
+##
+
+name: libjzon.a
+
+type: lib
+
+namespace: jzon
+
+dependencies:
+  - libmy=master
+
+allowed: write malloc free calloc memmove memcpy memset read open close
+
+main: ./src/main.c
+
+src:
+  - ./src/lib.c
+
+tests_src:
+  - ./tests/main.c
