@@ -14,7 +14,7 @@ namespace: jzon
 dependencies:
   - libmy=master
 
-allowed: write malloc free calloc memmove memcpy memset read open close
+allowed: write malloc free
 
 main: ./src/main.c
 
