@@ -14,12 +14,19 @@ namespace: jzon
 dependencies:
   - libmy=master
 
-allowed: write malloc free
-
-main: ./src/main.c
+allowed:
+  - malloc free calloc
+  - memmove memcpy memset
+  - write read open close
+  - rand rand_r srand
+  - time free
 
 src:
-  - ./src/lib.c
+  - ./src/destroy.c
+  - ./src/drop.c
+  - ./src/from.c
+  - ./src/from.c
+  - ./src/from.c
 
 tests_src:
   - ./tests/main.c
