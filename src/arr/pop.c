@@ -9,7 +9,7 @@
 #include "my/collections/vec.h"
 #include "jzon/jzon.h"
 
-OPT(jzon) jzon_arr_pop(jzon_t self)
+OPT(jzon) jzon_pop(jzon_t self)
 {
     OPT(ptr) val = NONE(ptr);
 
@@ -19,7 +19,7 @@ OPT(jzon) jzon_arr_pop(jzon_t self)
     return (val.is_some ? SOME(jzon, val.v) : NONE(jzon));
 }
 
-OPT(jzon) jzon_arr_popi(jzon_t self, usize_t index)
+OPT(jzon) jzon_popi(jzon_t self, usize_t index)
 {
     OPT(ptr) val = NONE(ptr);
 

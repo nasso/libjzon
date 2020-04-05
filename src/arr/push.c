@@ -9,14 +9,14 @@
 #include "my/collections/vec.h"
 #include "jzon/jzon.h"
 
-bool jzon_arr_push(jzon_t self, jzon_t element)
+bool jzon_push(jzon_t self, jzon_t element)
 {
     if (self->v->type != JZ_ARR)
         return (true);
     return (vec_push((vec_t*) self->v->u.arr, element));
 }
 
-bool jzon_arr_pushi(jzon_t self, usize_t index, jzon_t element)
+bool jzon_pushi(jzon_t self, usize_t index, jzon_t element)
 {
     if (self->v->type != JZ_ARR)
         return (true);

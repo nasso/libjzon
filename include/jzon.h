@@ -56,15 +56,21 @@ jzon_t jzon_from_cstr(const char *str);
 jzon_t jzon_iref(jzon_t self);
 void jzon_drop(jzon_t self);
 usize_t jzon_len(const jzon_t self);
-bool jzon_push(jzon_t self, jzon_t element);
-bool jzon_pushi(jzon_t self, usize_t index, jzon_t element);
-OPT(jzon) jzon_pop(jzon_t self);
-OPT(jzon) jzon_popi(jzon_t self, usize_t index);
 bool jzon_setq(jzon_t self, const char *query, jzon_t element);
 bool jzon_setk(jzon_t self, const char *key, jzon_t element);
 bool jzon_seti(jzon_t self, usize_t index, jzon_t element);
 OPT(jzon) jzon_getq(const jzon_t self, const char *query);
 OPT(jzon) jzon_getk(const jzon_t self, const char *key);
 OPT(jzon) jzon_geti(const jzon_t self, usize_t index);
+bool jzon_push(jzon_t self, jzon_t element);
+bool jzon_pushi(jzon_t self, usize_t index, jzon_t element);
+OPT(jzon) jzon_pop(jzon_t self);
+OPT(jzon) jzon_popi(jzon_t self, usize_t index);
+const char *jzon_str(const jzon_t self);
+bool jzon_set_str(jzon_t self, const char *str);
+f64_t jzon_num(const jzon_t self);
+bool jzon_set_num(jzon_t self, f64_t val);
+bool jzon_bool(const jzon_t self);
+bool jzon_set_bool(jzon_t self, bool val);
 
 #endif /* LIBJZON_H */
