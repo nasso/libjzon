@@ -9,6 +9,12 @@
 #include "my/io.h"
 #include "jzon/jzon.h"
 
+jzon_t jzon_from_reader(bufreader_t *reader)
+{
+    (void)(reader);
+    return (jzon_create_null());
+}
+
 jzon_t jzon_from_path(const char *path)
 {
     jzon_t self = NULL;

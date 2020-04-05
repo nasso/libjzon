@@ -22,11 +22,22 @@ allowed:
   - time free
 
 src:
+  - ./src/create/arr.c
+  - ./src/create/bool.c
+  - ./src/create/create.c
+  - ./src/create/null.c
+  - ./src/create/num.c
+  - ./src/create/obj.c
+  - ./src/create/str.c
+  - ./src/arr/geti.c
+  - ./src/arr/pop.c
+  - ./src/arr/push.c
+  - ./src/arr/seti.c
   - ./src/destroy.c
   - ./src/drop.c
   - ./src/from.c
-  - ./src/from.c
-  - ./src/from.c
+  - ./src/iref.c
+  - ./src/len.c
 
 tests_src:
-  - ./tests/main.c
+  - ./tests/constructors.c

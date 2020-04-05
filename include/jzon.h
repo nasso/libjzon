@@ -42,19 +42,29 @@ typedef RC(jzon) jzon_t;
 
 OPT_DEFINE(jzon_t, jzon)
 
+jzon_t jzon_create(jzon_type_t type);
 jzon_t jzon_create_str(const char *val);
 jzon_t jzon_create_num(f64_t val);
 jzon_t jzon_create_obj(void);
-jzon_t jzon_create_arr(usize_t size);
+jzon_t jzon_create_arr(void);
 jzon_t jzon_create_bool(bool val);
 jzon_t jzon_create_null(void);
 jzon_t jzon_from_reader(bufreader_t *reader);
 jzon_t jzon_from_path(const char *path);
 jzon_t jzon_from_file(fd_t fd);
 jzon_t jzon_from_cstr(const char *str);
+jzon_t jzon_iref(jzon_t self);
 void jzon_drop(jzon_t self);
-OPT(jzon) jzon_getq(jzon_t self, const char *query);
-OPT(jzon) jzon_get(jzon_t self, const char *key);
-OPT(jzon) jzon_ind(jzon_t self, usize_t index);
+usize_t jzon_len(const jzon_t self);
+bool jzon_push(jzon_t self, jzon_t element);
+bool jzon_pushi(jzon_t self, usize_t index, jzon_t element);
+OPT(jzon) jzon_pop(jzon_t self);
+OPT(jzon) jzon_popi(jzon_t self, usize_t index);
+bool jzon_setq(jzon_t self, const char *query, jzon_t element);
+bool jzon_setk(jzon_t self, const char *key, jzon_t element);
+bool jzon_seti(jzon_t self, usize_t index, jzon_t element);
+OPT(jzon) jzon_getq(const jzon_t self, const char *query);
+OPT(jzon) jzon_getk(const jzon_t self, const char *key);
+OPT(jzon) jzon_geti(const jzon_t self, usize_t index);
 
 #endif /* LIBJZON_H */
