@@ -107,3 +107,34 @@ Test(parser, parse_array)
     cr_assert_float_eq(jzon_num(jzon_geti(jzon_geti(jz, 5), 1)), 2, EPSILON);
     cr_assert_float_eq(jzon_num(jzon_geti(jzon_geti(jz, 5), 2)), 3, EPSILON);
 }
+
+Test(parser, parse_empty_object)
+{
+    jzon_t jz = jzon_from("  {  } ");
+
+    cr_assert_not_null(jz);
+    cr_assert_eq(jzon_len(jz), 0);
+    jzon_drop(jz);
+}
+
+Test(parser, parse_object)
+{
+    jzon_t jz = jzon_from(" { \"foo\"\t:\"bar\" ,  \"bar\"  : false } ");
+
+    cr_assert_not_null(jz);
+    cr_assert_eq(jzon_len(jz), 2);
+    cr_assert_str_eq(jzon_str(jzon_getk(jz, "foo")), "bar");
+    cr_assert_eq(jzon_bool(jzon_getk(jz, "bar")), false);
+    jzon_drop(jz);
+}
+
+Test(parser, parse_object_recurse)
+{
+    jzon_t jz = jzon_from(" { \"foo\"\t:\"bar\" , \"bar\"  : {\"ha\":\"hi\"}}");
+
+    cr_assert_not_null(jz);
+    cr_assert_eq(jzon_len(jz), 2);
+    cr_assert_str_eq(jzon_str(jzon_getk(jz, "foo")), "bar");
+    cr_assert_str_eq(jzon_str(jzon_getk(jzon_getk(jz, "bar"), "ha")), "hi");
+    jzon_drop(jz);
+}
