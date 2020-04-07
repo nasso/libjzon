@@ -35,6 +35,17 @@ src:
   - ./src/create/str.c
   - ./src/obj/get.c
   - ./src/obj/set.c
+  - ./src/parse/priv/tag.c
+  - ./src/parse/priv/ws.c
+  - ./src/parse/array.c
+  - ./src/parse/bool.c
+  - ./src/parse/element.c
+  - ./src/parse/json.c
+  - ./src/parse/null.c
+  - ./src/parse/number.c
+  - ./src/parse/object.c
+  - ./src/parse/string.c
+  - ./src/parse/value.c
   - ./src/bool.c
   - ./src/destroy.c
   - ./src/drop.c
@@ -48,4 +59,5 @@ tests_src:
   - ./tests/constructors.c
   - ./tests/array.c
   - ./tests/object.c
+  - ./tests/parser.c
   - ./tests/primitives.c

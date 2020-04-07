@@ -10,11 +10,11 @@
 
 static void assert_num_at(jzon_t jz, usize_t i, f64_t num)
 {
-    OPT(jzon) val = NONE(jzon);
+    jzon_t val = NULL;
 
     val = jzon_geti(jz, i);
-    cr_assert(val.is_some);
-    cr_assert(val.v->v->type == JZ_NUM && val.v->v->u.num == num);
+    cr_assert_not_null(val);
+    cr_assert(val->v->type == JZ_NUM && val->v->u.num == num);
 }
 
 Test(arrays, push)
@@ -48,7 +48,7 @@ Test(arrays, pushi)
 Test(arrays, pop)
 {
     jzon_t jz = jzon_create_arr();
-    OPT(jzon) element = NONE(jzon);
+    jzon_t element = NULL;
 
     cr_assert_not(jzon_push(jz, jzon_create_num(35)));
     cr_assert_not(jzon_push(jz, jzon_create_num(5.8)));
@@ -58,16 +58,16 @@ Test(arrays, pop)
     assert_num_at(jz, 0, 35);
     assert_num_at(jz, 1, 5.8);
     jzon_drop(jz);
-    cr_assert(element.is_some);
-    cr_assert_eq(element.v->v->type, JZ_NUM);
-    cr_assert_eq(element.v->v->u.num, 420);
-    jzon_drop(element.v);
+    cr_assert_not_null(element);
+    cr_assert_eq(element->v->type, JZ_NUM);
+    cr_assert_eq(element->v->u.num, 420);
+    jzon_drop(element);
 }
 
 Test(arrays, popi)
 {
     jzon_t jz = jzon_create_arr();
-    OPT(jzon) element = NONE(jzon);
+    jzon_t element = NULL;
 
     cr_assert_not(jzon_push(jz, jzon_create_num(35)));
     cr_assert_not(jzon_push(jz, jzon_create_num(5.8)));
@@ -77,8 +77,8 @@ Test(arrays, popi)
     assert_num_at(jz, 0, 35);
     assert_num_at(jz, 1, 420);
     jzon_drop(jz);
-    cr_assert(element.is_some);
-    cr_assert_eq(element.v->v->type, JZ_NUM);
-    cr_assert_eq(element.v->v->u.num, 5.8);
-    jzon_drop(element.v);
+    cr_assert_not_null(element);
+    cr_assert_eq(element->v->type, JZ_NUM);
+    cr_assert_eq(element->v->u.num, 5.8);
+    jzon_drop(element);
 }

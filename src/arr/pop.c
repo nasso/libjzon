@@ -9,22 +9,22 @@
 #include "my/collections/vec.h"
 #include "jzon/jzon.h"
 
-OPT(jzon) jzon_pop(jzon_t self)
+jzon_t jzon_pop(jzon_t self)
 {
     OPT(ptr) val = NONE(ptr);
 
     if (self->v->type != JZ_ARR)
-        return (NONE(jzon));
+        return (NULL);
     val = vec_pop((vec_t*) self->v->u.arr);
-    return (val.is_some ? SOME(jzon, val.v) : NONE(jzon));
+    return (val.is_some ? val.v : NULL);
 }
 
-OPT(jzon) jzon_popi(jzon_t self, usize_t index)
+jzon_t jzon_popi(jzon_t self, usize_t index)
 {
     OPT(ptr) val = NONE(ptr);
 
     if (self->v->type != JZ_ARR)
-        return (NONE(jzon));
+        return (NULL);
     val = vec_remove((vec_t*) self->v->u.arr, index);
-    return (val.is_some ? SOME(jzon, val.v) : NONE(jzon));
+    return (val.is_some ? val.v : NULL);
 }

@@ -9,19 +9,19 @@
 #include "my/collections/hash_map.h"
 #include "jzon/jzon.h"
 
-OPT(jzon) jzon_getq(const jzon_t self, const char *query)
+jzon_t jzon_getq(const jzon_t self, const char *query)
 {
     (void)(self);
     (void)(query);
-    return (NONE(jzon));
+    return (NULL);
 }
 
-OPT(jzon) jzon_getk(const jzon_t self, const char *key)
+jzon_t jzon_getk(const jzon_t self, const char *key)
 {
     OPT(ptr) val = NONE(ptr);
 
     if (self->v->type != JZ_OBJ)
-        return (NONE(jzon));
+        return (NULL);
     val = hash_map_get(self->v->u.obj, key);
-    return (val.is_some ? SOME(jzon, jzon_iref(val.v)) : NONE(jzon));
+    return (val.is_some ? jzon_iref(val.v) : NULL);
 }
