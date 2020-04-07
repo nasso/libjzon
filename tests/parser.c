@@ -49,18 +49,26 @@ Test(parser, parse_integer_num)
 Test(parser, parse_floating_point_num)
 {
     cr_assert_float_eq(jzon_num(jzon_from("0.0")), 0, EPSILON);
-    cr_assert_float_eq(jzon_num(jzon_from("0.0000")), 0, EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_from("\n\n0.0000")), 0, EPSILON);
     cr_assert_float_eq(jzon_num(jzon_from("1.002")), 1.002, EPSILON);
-    cr_assert_float_eq(jzon_num(jzon_from("59.95")), 59.95, EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_from(" 59.95")), 59.95, EPSILON);
     cr_assert_float_eq(jzon_num(jzon_from("-63.936")), -63.936, EPSILON);
-    cr_assert_float_eq(jzon_num(jzon_from("-0.420")), -0.420, EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_from("-0.420  ")), -0.420, EPSILON);
 }
 
 Test(parser, parse_exp_num)
 {
-    cr_assert_float_eq(jzon_num(jzon_from("0e98")), 0e98, EPSILON);
-    cr_assert_float_eq(jzon_num(jzon_from("9e2")), 9e2, EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_from(" 0e98\t")), 0e98, EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_from("  9e2 ")), 9e2, EPSILON);
     cr_assert_float_eq(jzon_num(jzon_from("-7E3")), -7E3, EPSILON);
     cr_assert_float_eq(jzon_num(jzon_from("-37.13e+10")), -37.13e+10, EPSILON);
     cr_assert_float_eq(jzon_num(jzon_from("-37.13e-2")), -37.13e-2, EPSILON);
+}
+
+Test(parser, parse_string)
+{
+    cr_assert_str_eq(jzon_str(jzon_from("\"\"")), "");
+    cr_assert_str_eq(jzon_str(jzon_from(" \t  \"hey\" \t")), "hey");
+    cr_assert_str_eq(jzon_str(jzon_from("\"hgeils\\n\\tbg\"")), "hgeils\n\tbg");
+    cr_assert_str_eq(jzon_str(jzon_from("\"\\\" \\/ ht\"")), "\" / ht");
 }
