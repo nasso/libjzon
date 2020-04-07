@@ -48,5 +48,6 @@ OPT(jzon_parser_res) jzon_parse_array(const char *str)
         jzon_drop(res.u.jz);
         return (NONE(jzon_parser_res));
     }
+    res.rem++;
     return (SOME(jzon_parser_res, res));
 }

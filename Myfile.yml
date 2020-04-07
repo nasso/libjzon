@@ -33,6 +33,8 @@ src:
   - ./src/create/num.c
   - ./src/create/obj.c
   - ./src/create/str.c
+  - ./src/deser/deser.c
+  - ./src/deser/from.c
   - ./src/obj/get.c
   - ./src/obj/set.c
   - ./src/parse/priv/tag.c
@@ -46,6 +48,7 @@ src:
   - ./src/parse/object.c
   - ./src/parse/string.c
   - ./src/parse/value.c
+  - ./src/query/getq.c
   - ./src/bool.c
   - ./src/destroy.c
   - ./src/drop.c

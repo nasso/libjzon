@@ -9,13 +9,6 @@
 #include "my/collections/hash_map.h"
 #include "jzon/jzon.h"
 
-jzon_t jzon_getq(const jzon_t self, const char *query)
-{
-    (void)(self);
-    (void)(query);
-    return (NULL);
-}
-
 jzon_t jzon_getk(const jzon_t self, const char *key)
 {
     OPT(ptr) val = NONE(ptr);

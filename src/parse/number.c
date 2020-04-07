@@ -18,7 +18,7 @@ static bool parse_int(const char **str, f64_t *nb)
         (*str)++;
         return (false);
     }
-    while (**str && my_cstrchr("123456789", **str)) {
+    while (**str && my_cstrchr("0123456789", **str)) {
         found_digit = true;
         *nb *= 10;
         *nb += **str - '0';

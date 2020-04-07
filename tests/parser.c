@@ -12,6 +12,43 @@
 
 static const f64_t EPSILON = 0.00001;
 
+static const char *SAMPLE_JSON =
+    "{"
+    "   \"foo\": \"bar\","
+    "   \"bar\": \"foo\","
+    "   \"hello\": 58,"
+    "   \"some_obj\": {"
+    "       \"inner\": \"value\","
+    "       \"inner_obj\": { \"nice\": 69 },"
+    "       \"arr\": [420, 69, 621],"
+    "       \"nothing\": null"
+    "   }"
+    "}";
+
+Test(parser, sample_json)
+{
+    jzon_t jz = jzon_from(SAMPLE_JSON);
+    jzon_t some_obj = NULL;
+
+    cr_assert_not_null(jz);
+    cr_assert_str_eq(jzon_str(jzon_getk(jz, "foo")), "bar");
+    cr_assert_str_eq(jzon_str(jzon_getk(jz, "bar")), "foo");
+    cr_assert_float_eq(jzon_num(jzon_getk(jz, "hello")), 58, EPSILON);
+    some_obj = jzon_getk(jz, "some_obj");
+    cr_assert_str_eq(jzon_str(jzon_getk(some_obj, "inner")), "value");
+    cr_assert_float_eq(
+        jzon_num(jzon_getk(jzon_getk(some_obj, "inner_obj"), "nice")), 69,
+        EPSILON);
+    cr_assert_eq(jzon_len(jzon_getk(some_obj, "arr")), 3);
+    cr_assert_float_eq(jzon_num(jzon_geti(jzon_getk(some_obj, "arr"), 0)), 420,
+        EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_geti(jzon_getk(some_obj, "arr"), 1)), 69,
+        EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_geti(jzon_getk(some_obj, "arr"), 2)), 621,
+        EPSILON);
+    cr_assert(jzon_is_null(jzon_getk(some_obj, "nothing")));
+}
+
 Test(parser, parse_null)
 {
     jzon_t jz = jzon_from("null");
