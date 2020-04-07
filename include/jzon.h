@@ -70,5 +70,6 @@ f64_t jzon_num(const jzon_t self);
 bool jzon_set_num(jzon_t self, f64_t val);
 bool jzon_bool(const jzon_t self);
 bool jzon_set_bool(jzon_t self, bool val);
+bool jzon_is_null(const jzon_t jz);
 
 #endif /* LIBJZON_H */

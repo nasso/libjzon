@@ -17,7 +17,7 @@ Test(parser, parse_null)
     jzon_t jz = jzon_from("null");
 
     cr_assert_not_null(jz);
-    cr_assert_eq(jz->v->type, JZ_NULL);
+    cr_assert(jzon_is_null(jz));
 }
 
 Test(parser, parse_true)
@@ -71,4 +71,39 @@ Test(parser, parse_string)
     cr_assert_str_eq(jzon_str(jzon_from(" \t  \"hey\" \t")), "hey");
     cr_assert_str_eq(jzon_str(jzon_from("\"hgeils\\n\\tbg\"")), "hgeils\n\tbg");
     cr_assert_str_eq(jzon_str(jzon_from("\"\\\" \\/ ht\"")), "\" / ht");
+}
+
+Test(parser, parse_empty_array)
+{
+    jzon_t jz = jzon_from("  [] ");
+
+    cr_assert_not_null(jz);
+    cr_assert_eq(jzon_len(jz), 0);
+    jzon_drop(jz);
+}
+
+Test(parser, parse_empty_array_ws)
+{
+    jzon_t jz = jzon_from("  [  ] ");
+
+    cr_assert_not_null(jz);
+    cr_assert_eq(jzon_len(jz), 0);
+    jzon_drop(jz);
+}
+
+Test(parser, parse_array)
+{
+    jzon_t jz = jzon_from("  [ \" he\" , 52, false,null,true,[1, 2,3] ] ");
+
+    cr_assert_not_null(jz);
+    cr_assert_eq(jzon_len(jz), 6);
+    cr_assert_str_eq(jzon_str(jzon_geti(jz, 0)), " he");
+    cr_assert_float_eq(jzon_num(jzon_geti(jz, 1)), 52, EPSILON);
+    cr_assert_eq(jzon_bool(jzon_geti(jz, 2)), false);
+    cr_assert(jzon_is_null(jzon_geti(jz, 3)));
+    cr_assert_eq(jzon_bool(jzon_geti(jz, 4)), true);
+    cr_assert_eq(jzon_len(jzon_geti(jz, 5)), 3);
+    cr_assert_float_eq(jzon_num(jzon_geti(jzon_geti(jz, 5), 0)), 1, EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_geti(jzon_geti(jz, 5), 1)), 2, EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_geti(jzon_geti(jz, 5), 2)), 3, EPSILON);
 }

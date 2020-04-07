@@ -51,6 +51,7 @@ src:
   - ./src/drop.c
   - ./src/from.c
   - ./src/iref.c
+  - ./src/is_null.c
   - ./src/len.c
   - ./src/num.c
   - ./src/str.c
