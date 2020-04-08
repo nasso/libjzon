@@ -43,14 +43,15 @@ Test(getq, multi_field)
     jzon_drop(jz);
 }
 
-int main(void)
+Test(getq, array_fetch)
 {
     jzon_t jz = jzon_from(SAMPLE_JSON);
-    jzon_t inner = jzon_getq(jz, ".some_obj.inner");
-    jzon_t nice = jzon_getq(jz, ".some_obj.inner_obj.nice");
 
-    jzon_drop(inner);
-    jzon_drop(nice);
+    cr_assert_float_eq(jzon_num(jzon_getq(jz, ".some_obj  . arr[0]")), 420,
+        EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_getq(jz, " .some_obj.  arr[ 1  ] ")), 69,
+        EPSILON);
+    cr_assert_float_eq(jzon_num(jzon_getq(jz, ".some_obj .arr [   002]")), 621,
+        EPSILON);
     jzon_drop(jz);
-    return (0);
 }
