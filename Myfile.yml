@@ -60,8 +60,9 @@ src:
   - ./src/str.c
 
 tests_src:
-  - ./tests/constructors.c
   - ./tests/array.c
+  - ./tests/constructors.c
+  - ./tests/getq.c
   - ./tests/object.c
   - ./tests/parser.c
   - ./tests/primitives.c

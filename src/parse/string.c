@@ -64,8 +64,10 @@ OPT(jzon_parser_res) jzon_parse_string(const char *str)
     bool err = read_str(&str, bw);
 
     bufwriter_free(bw);
-    if (err || strbuf == NULL)
+    if (err || strbuf == NULL) {
+        my_free(strbuf);
         return (NONE(jzon_parser_res));
+    }
     res.rem = str;
     res.u.jz = jzon_create_str(strbuf);
     my_free(strbuf);
