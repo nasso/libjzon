@@ -33,6 +33,11 @@ src:
   - ./src/create/num.c
   - ./src/create/obj.c
   - ./src/create/str.c
+  - ./src/deser/types/array.c
+  - ./src/deser/types/float.c
+  - ./src/deser/types/sint.c
+  - ./src/deser/types/string.c
+  - ./src/deser/types/uint.c
   - ./src/deser/deser.c
   - ./src/deser/from.c
   - ./src/obj/get.c
@@ -62,6 +67,7 @@ src:
 tests_src:
   - ./tests/array.c
   - ./tests/constructors.c
+  - ./tests/deser.c
   - ./tests/getq.c
   - ./tests/object.c
   - ./tests/parser.c
