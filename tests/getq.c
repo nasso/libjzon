@@ -28,6 +28,7 @@ Test(getq, simple_field)
 {
     jzon_t jz = jzon_from(SAMPLE_JSON);
 
+    cr_assert_eq(jzon_getq(jz, ""), jz);
     cr_assert_str_eq(jzon_str(jzon_getq(jz, ".foo")), "bar");
     cr_assert_str_eq(jzon_str(jzon_getq(jz, ".bar")), "foo");
     jzon_drop(jz);

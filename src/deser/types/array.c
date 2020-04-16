@@ -45,4 +45,5 @@ const jzon_type_desc_t JZON_HEAP_ARR_TYPE_DESC = {
     .primitive = JZ_ARR,
     .deser_func = &jzon_deser_heap_arr,
     .size = sizeof(void*),
+    .is_ptr = true,
 };

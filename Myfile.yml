@@ -35,6 +35,7 @@ src:
   - ./src/create/str.c
   - ./src/deser/types/array.c
   - ./src/deser/types/float.c
+  - ./src/deser/types/map.c
   - ./src/deser/types/sint.c
   - ./src/deser/types/string.c
   - ./src/deser/types/uint.c

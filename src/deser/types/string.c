@@ -23,4 +23,5 @@ const jzon_type_desc_t JZON_STR_TYPE_DESC = {
     .primitive = JZ_STR,
     .deser_func = &jzon_deser_str,
     .size = sizeof(char*),
+    .is_ptr = true,
 };

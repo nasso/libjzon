@@ -26,6 +26,10 @@ static const char *SAMPLE_MAP =
     "           \"size\": {\"width\": 2, \"height\": 5},"
     "           \"tiles\": [7, 5, 8, 6, 3, 5, 1, 8, 2, 5]"
     "       }"
+    "   ],"
+    "   \"properties\": ["
+    "       {\"goat\": \"baa\", \"fox\": \"yip\"},"
+    "       {\"dog\": \"bark\", \"cat\": \"meow\"}"
     "   ]"
     "}";
 
@@ -41,11 +45,14 @@ struct map {
     char *name;
     struct layer *layers;
     usize_t layer_count;
+    hash_map_t **properties;
+    usize_t property_count;
 };
 
 static const jzon_type_desc_t LAYER_TYPE_DESC = {
     .primitive = JZ_OBJ,
     .size = sizeof(struct layer),
+    .is_ptr = true,
     .fields = {
         {
             .match = ".size.width",
@@ -62,6 +69,19 @@ static const jzon_type_desc_t LAYER_TYPE_DESC = {
             .offset = offsetof(struct layer, tiles),
             .type = &JZON_HEAP_ARR_TYPE_DESC,
             .item_type = &JZON_U64_TYPE_DESC,
+        },
+    },
+};
+
+static const jzon_type_desc_t MAP_PROPERTY_TYPE_DESC = {
+    .primitive = JZ_OBJ,
+    .size = sizeof(hash_map_t*),
+    .fields = {
+        {
+            .match = "",
+            .offset = 0,
+            .type = &JZON_HASH_MAP_TYPE_DESC,
+            .item_type = &JZON_STR_TYPE_DESC,
         },
     },
 };
@@ -86,6 +106,17 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
             .offset = offsetof(struct map, layer_count),
             .type = &JZON_ARR_SIZE_TYPE_DESC,
         },
+        {
+            .match = ".properties",
+            .offset = offsetof(struct map, properties),
+            .type = &JZON_HEAP_ARR_TYPE_DESC,
+            .item_type = &MAP_PROPERTY_TYPE_DESC,
+        },
+        {
+            .match = ".properties",
+            .offset = offsetof(struct map, property_count),
+            .type = &JZON_ARR_SIZE_TYPE_DESC,
+        },
     },
 };
 
@@ -108,4 +139,15 @@ Test(deser, map)
     cr_assert_eq(map.layers[2].size.width, 2);
     cr_assert_eq(map.layers[2].size.height, 5);
     cr_assert_arr_eq(map.layers[2].tiles, TILES_3, 10);
+    cr_assert_eq(map.property_count, 2);
+    cr_assert_not_null(map.properties[0]);
+    cr_assert(hash_map_contains_key(map.properties[0], "goat"));
+    cr_assert(hash_map_contains_key(map.properties[0], "fox"));
+    cr_assert_str_eq(hash_map_get(map.properties[0], "goat").v, "baa");
+    cr_assert_str_eq(hash_map_get(map.properties[0], "fox").v, "yip");
+    cr_assert_not_null(map.properties[1]);
+    cr_assert(hash_map_contains_key(map.properties[1], "dog"));
+    cr_assert(hash_map_contains_key(map.properties[1], "cat"));
+    cr_assert_str_eq(hash_map_get(map.properties[1], "dog").v, "bark");
+    cr_assert_str_eq(hash_map_get(map.properties[1], "cat").v, "meow");
 }
