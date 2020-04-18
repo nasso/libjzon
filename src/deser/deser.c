@@ -30,7 +30,7 @@ static bool deser_struct(const jzon_t jz, const jzon_type_desc_t *type_desc,
 bool jzon_deser(const jzon_t jz, const jzon_type_desc_t *type_desc,
     const jzon_deser_params_t *params, void *dest)
 {
-    if (type_desc->primitive != jz->v->type)
+    if (type_desc->primitive != JZ_ANY && type_desc->primitive != jz->v->type)
         return (true);
     else if (type_desc->deser_func)
         return (type_desc->deser_func(jz, params, dest));

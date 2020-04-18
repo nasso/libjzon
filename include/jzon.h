@@ -15,6 +15,7 @@
 #include "my/collections/vec.h"
 
 typedef enum {
+    JZ_ANY,
     JZ_STR,
     JZ_NUM,
     JZ_OBJ,
