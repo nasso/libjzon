@@ -105,15 +105,28 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
             .type = &JZON_STR_TYPE_DESC,
         },
         {
+            .match = ".optional",
+            .optional = true,
+            .offset = offsetof(struct map, name),
+            .type = &JZON_I8_TYPE_DESC,
+        },
+        {
             .match = ".type",
             .offset = offsetof(struct map, type),
             .type = &JZON_ENUM_TYPE_DESC,
+            .optional = true,
             .params.str_enum = {
                 { "tileset", TYPE_TILESET },
                 { "something", TYPE_SOMETHING },
                 { "map", TYPE_MAP },
                 { "template", TYPE_TEMPLATE },
             },
+        },
+        {
+            .match = ".type",
+            .offset = offsetof(struct map, type),
+            .type = &JZON_I32_TYPE_DESC,
+            .optional = true,
         },
         {
             .match = ".layers",

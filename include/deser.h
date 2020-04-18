@@ -40,6 +40,7 @@ struct jzon_type_desc {
     bool is_ptr;
     struct {
         const char *match;
+        bool optional;
         usize_t offset;
         const jzon_type_desc_t *type;
         jzon_deser_params_t params;

@@ -17,12 +17,12 @@ static bool deser_struct(const jzon_t jz, const jzon_type_desc_t *type_desc,
     for (usize_t i = 0; !err && i < JZON_DESER_MAX_FIELD_COUNT &&
         type_desc->fields[i].match; i++) {
         sub_jz = jzon_getq(jz, type_desc->fields[i].match);
-        if (sub_jz == NULL)
-            continue;
-        err = jzon_deser(sub_jz, type_desc->fields[i].type,
+        err = sub_jz == NULL || jzon_deser(sub_jz, type_desc->fields[i].type,
             &type_desc->fields[i].params,
             (char*) dest + type_desc->fields[i].offset);
-        jzon_drop(sub_jz);
+        if (sub_jz != NULL)
+            jzon_drop(sub_jz);
+        err &= !type_desc->fields[i].optional;
     }
     return (err);
 }
