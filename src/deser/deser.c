@@ -20,7 +20,7 @@ static bool deser_struct(const jzon_t jz, const jzon_type_desc_t *type_desc,
         if (sub_jz == NULL)
             continue;
         err = jzon_deser(sub_jz, type_desc->fields[i].type,
-            type_desc->fields[i].item_type,
+            &type_desc->fields[i].params,
             (char*) dest + type_desc->fields[i].offset);
         jzon_drop(sub_jz);
     }
@@ -28,11 +28,11 @@ static bool deser_struct(const jzon_t jz, const jzon_type_desc_t *type_desc,
 }
 
 bool jzon_deser(const jzon_t jz, const jzon_type_desc_t *type_desc,
-    const jzon_type_desc_t *item_type, void *dest)
+    const jzon_deser_params_t *params, void *dest)
 {
     if (type_desc->primitive != jz->v->type)
         return (true);
     else if (type_desc->deser_func)
-        return (type_desc->deser_func(jz, item_type, dest));
+        return (type_desc->deser_func(jz, params, dest));
     return (deser_struct(jz, type_desc, dest));
 }

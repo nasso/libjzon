@@ -9,42 +9,42 @@
 #include "jzon/jzon.h"
 #include "jzon/deser.h"
 
-static bool jzon_deser_i8(const jzon_t jz, const jzon_type_desc_t *item_type,
+static bool jzon_deser_i8(const jzon_t jz, const jzon_deser_params_t *params,
     void *dest)
 {
-    (void)(item_type);
+    (void)(params);
     *((i8_t*) dest) = jzon_num(jz);
     return (false);
 }
 
-static bool jzon_deser_i16(const jzon_t jz, const jzon_type_desc_t *item_type,
+static bool jzon_deser_i16(const jzon_t jz, const jzon_deser_params_t *params,
     void *dest)
 {
-    (void)(item_type);
+    (void)(params);
     *((i16_t*) dest) = jzon_num(jz);
     return (false);
 }
 
-static bool jzon_deser_i32(const jzon_t jz, const jzon_type_desc_t *item_type,
+static bool jzon_deser_i32(const jzon_t jz, const jzon_deser_params_t *params,
     void *dest)
 {
-    (void)(item_type);
+    (void)(params);
     *((i32_t*) dest) = jzon_num(jz);
     return (false);
 }
 
-static bool jzon_deser_i64(const jzon_t jz, const jzon_type_desc_t *item_type,
+static bool jzon_deser_i64(const jzon_t jz, const jzon_deser_params_t *params,
     void *dest)
 {
-    (void)(item_type);
+    (void)(params);
     *((i64_t*) dest) = jzon_num(jz);
     return (false);
 }
 
-static bool jzon_deser_isize(const jzon_t jz, const jzon_type_desc_t *item_type,
+static bool jzon_deser_isize(const jzon_t jz, const jzon_deser_params_t *params,
     void *dest)
 {
-    (void)(item_type);
+    (void)(params);
     *((isize_t*) dest) = jzon_num(jz);
     return (false);
 }

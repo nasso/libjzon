@@ -13,6 +13,7 @@
 static const char *SAMPLE_MAP =
     "{"
     "   \"name\": \"Gay Zone\","
+    "   \"type\": \"map\","
     "   \"layers\": ["
     "       {"
     "           \"size\": {\"width\": 4, \"height\": 2},"
@@ -33,6 +34,13 @@ static const char *SAMPLE_MAP =
     "   ]"
     "}";
 
+enum type {
+    TYPE_TILESET,
+    TYPE_SOMETHING,
+    TYPE_MAP,
+    TYPE_TEMPLATE,
+};
+
 struct layer {
     struct {
         usize_t width;
@@ -43,6 +51,7 @@ struct layer {
 
 struct map {
     char *name;
+    enum type type;
     struct layer *layers;
     usize_t layer_count;
     hash_map_t **properties;
@@ -68,7 +77,7 @@ static const jzon_type_desc_t LAYER_TYPE_DESC = {
             .match = ".tiles",
             .offset = offsetof(struct layer, tiles),
             .type = &JZON_HEAP_ARR_TYPE_DESC,
-            .item_type = &JZON_U64_TYPE_DESC,
+            .params.item_type = &JZON_U64_TYPE_DESC,
         },
     },
 };
@@ -81,7 +90,7 @@ static const jzon_type_desc_t MAP_PROPERTY_TYPE_DESC = {
             .match = "",
             .offset = 0,
             .type = &JZON_HASH_MAP_TYPE_DESC,
-            .item_type = &JZON_STR_TYPE_DESC,
+            .params.item_type = &JZON_STR_TYPE_DESC,
         },
     },
 };
@@ -96,10 +105,21 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
             .type = &JZON_STR_TYPE_DESC,
         },
         {
+            .match = ".type",
+            .offset = offsetof(struct map, type),
+            .type = &JZON_ENUM_TYPE_DESC,
+            .params.str_enum = {
+                { "tileset", TYPE_TILESET },
+                { "something", TYPE_SOMETHING },
+                { "map", TYPE_MAP },
+                { "template", TYPE_TEMPLATE },
+            },
+        },
+        {
             .match = ".layers",
             .offset = offsetof(struct map, layers),
             .type = &JZON_HEAP_ARR_TYPE_DESC,
-            .item_type = &LAYER_TYPE_DESC,
+            .params.item_type = &LAYER_TYPE_DESC,
         },
         {
             .match = ".layers",
@@ -110,7 +130,7 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
             .match = ".properties",
             .offset = offsetof(struct map, properties),
             .type = &JZON_HEAP_ARR_TYPE_DESC,
-            .item_type = &MAP_PROPERTY_TYPE_DESC,
+            .params.item_type = &MAP_PROPERTY_TYPE_DESC,
         },
         {
             .match = ".properties",
@@ -129,6 +149,7 @@ Test(deser, map)
 
     cr_assert_not(jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map));
     cr_assert_str_eq(map.name, "Gay Zone");
+    cr_assert_eq(map.type, TYPE_MAP);
     cr_assert_eq(map.layer_count, 3);
     cr_assert_eq(map.layers[0].size.width, 4);
     cr_assert_eq(map.layers[0].size.height, 2);

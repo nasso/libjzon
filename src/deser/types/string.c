@@ -9,12 +9,12 @@
 #include "jzon/jzon.h"
 #include "jzon/deser.h"
 
-static bool jzon_deser_str(const jzon_t jz, const jzon_type_desc_t *item_type,
+static bool jzon_deser_str(const jzon_t jz, const jzon_deser_params_t *params,
     void *dest)
 {
     char **str = dest;
 
-    (void)(item_type);
+    (void)(params);
     *str = my_cstrdup(jzon_str(jz));
     return (*str == NULL);
 }

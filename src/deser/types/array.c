@@ -10,24 +10,24 @@
 #include "jzon/deser.h"
 
 static bool jzon_deser_arr_size(const jzon_t jz,
-    const jzon_type_desc_t *item_type, void *dest)
+    const jzon_deser_params_t *params, void *dest)
 {
-    (void)(item_type);
+    (void)(params);
     *((usize_t*) dest) = jzon_len(jz);
     return (false);
 }
 
 static bool jzon_deser_heap_arr(const jzon_t jz,
-    const jzon_type_desc_t *item_type, void *dest)
+    const jzon_deser_params_t *params, void *dest)
 {
     void **arr = dest;
 
-    *arr = my_malloc(jzon_len(jz) * item_type->size);
+    *arr = my_malloc(jzon_len(jz) * params->item_type->size);
     if (*arr == NULL)
         return (true);
     for (usize_t i = 0; i < jzon_len(jz); i++) {
-        if (jzon_deser(jzon_geti(jz, i), item_type, NULL,
-            ((char*) *arr) + i * item_type->size)) {
+        if (jzon_deser(jzon_geti(jz, i), params->item_type, NULL,
+            ((char*) *arr) + i * params->item_type->size)) {
             my_free(arr);
             return (true);
         }

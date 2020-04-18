@@ -47,10 +47,10 @@ static OPT(i32) destroyer(void *ptr, hash_map_pair_t *pair)
 }
 
 static bool jzon_deser_hash_map(const jzon_t jz,
-    const jzon_type_desc_t *item_type, void *dest)
+    const jzon_deser_params_t *params, void *dest)
 {
     hash_map_t *map = hash_map_new();
-    struct clone_data data = { map, item_type };
+    struct clone_data data = { map, params->item_type };
 
     if (map == NULL)
         return (true);
