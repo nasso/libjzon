@@ -14,6 +14,7 @@ static const char *SAMPLE_MAP =
     "{"
     "   \"name\": \"Gay Zone\","
     "   \"type\": \"map\","
+    "   \"epic\": true,"
     "   \"layers\": ["
     "       {"
     "           \"size\": {\"width\": 4, \"height\": 2},"
@@ -51,6 +52,7 @@ struct layer {
 
 struct map {
     char *name;
+    bool epic;
     enum type type;
     struct layer *layers;
     usize_t layer_count;
@@ -103,6 +105,11 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
             .match = ".name",
             .offset = offsetof(struct map, name),
             .type = &JZON_STR_TYPE_DESC,
+        },
+        {
+            .match = ".epic",
+            .offset = offsetof(struct map, epic),
+            .type = &JZON_BOOL_TYPE_DESC,
         },
         {
             .match = ".optional",
@@ -162,6 +169,7 @@ Test(deser, map)
 
     cr_assert_not(jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map));
     cr_assert_str_eq(map.name, "Gay Zone");
+    cr_assert(map.epic);
     cr_assert_eq(map.type, TYPE_MAP);
     cr_assert_eq(map.layer_count, 3);
     cr_assert_eq(map.layers[0].size.width, 4);

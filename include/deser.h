@@ -52,6 +52,7 @@ extern const jzon_type_desc_t JZON_ARR_SIZE_TYPE_DESC;
 extern const jzon_type_desc_t JZON_HEAP_ARR_TYPE_DESC;
 extern const jzon_type_desc_t JZON_ENUM_TYPE_DESC;
 extern const jzon_type_desc_t JZON_STR_TYPE_DESC;
+extern const jzon_type_desc_t JZON_BOOL_TYPE_DESC;
 extern const jzon_type_desc_t JZON_U8_TYPE_DESC;
 extern const jzon_type_desc_t JZON_U16_TYPE_DESC;
 extern const jzon_type_desc_t JZON_U32_TYPE_DESC;

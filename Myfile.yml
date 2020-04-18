@@ -34,6 +34,7 @@ src:
   - ./src/create/obj.c
   - ./src/create/str.c
   - ./src/deser/types/array.c
+  - ./src/deser/types/bool.c
   - ./src/deser/types/enum.c
   - ./src/deser/types/float.c
   - ./src/deser/types/map.c
