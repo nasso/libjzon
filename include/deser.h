@@ -41,6 +41,7 @@ struct jzon_type_desc {
     struct {
         const char *match;
         bool optional;
+        const char *default_json;
         usize_t offset;
         const jzon_type_desc_t *type;
         jzon_deser_params_t params;

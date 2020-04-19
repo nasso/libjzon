@@ -53,6 +53,7 @@ struct layer {
 struct map {
     char *name;
     bool epic;
+    bool true_by_default;
     enum type type;
     struct layer *layers;
     usize_t layer_count;
@@ -118,6 +119,12 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
             .type = &JZON_I8_TYPE_DESC,
         },
         {
+            .match = ".true_by_default",
+            .default_json = "true",
+            .offset = offsetof(struct map, true_by_default),
+            .type = &JZON_BOOL_TYPE_DESC,
+        },
+        {
             .match = ".type",
             .offset = offsetof(struct map, type),
             .type = &JZON_ENUM_TYPE_DESC,
@@ -170,6 +177,7 @@ Test(deser, map)
     cr_assert_not(jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map));
     cr_assert_str_eq(map.name, "Gay Zone");
     cr_assert(map.epic);
+    cr_assert(map.true_by_default);
     cr_assert_eq(map.type, TYPE_MAP);
     cr_assert_eq(map.layer_count, 3);
     cr_assert_eq(map.layers[0].size.width, 4);
