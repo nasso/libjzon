@@ -43,6 +43,13 @@ src:
   - ./src/deser/types/uint.c
   - ./src/deser/deser.c
   - ./src/deser/from.c
+  - ./src/get/arr.c
+  - ./src/get/bool.c
+  - ./src/get/is_null.c
+  - ./src/get/len.c
+  - ./src/get/num.c
+  - ./src/get/obj.c
+  - ./src/get/str.c
   - ./src/obj/get.c
   - ./src/obj/set.c
   - ./src/parse/priv/tag.c
