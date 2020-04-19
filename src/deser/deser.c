@@ -11,16 +11,15 @@
 static bool deser_struct(const jzon_t jz, const jzon_type_desc_t *type_desc,
     void *dest)
 {
-    bool err = false;
+    bool err = jz == NULL;
     jzon_t sub_jz = NULL;
 
     for (usize_t i = 0; !err && i < JZON_DESER_MAX_FIELD_COUNT &&
         type_desc->fields[i].match; i++) {
         sub_jz = jzon_getq(jz, type_desc->fields[i].match);
-        if (sub_jz == NULL && !type_desc->fields[i].optional &&
-            type_desc->fields[i].default_json != NULL)
+        if (sub_jz == NULL && type_desc->fields[i].default_json != NULL)
             sub_jz = jzon_from(type_desc->fields[i].default_json);
-        err = sub_jz == NULL || jzon_deser(sub_jz, type_desc->fields[i].type,
+        err = jzon_deser(sub_jz, type_desc->fields[i].type,
             &type_desc->fields[i].params,
             (char*) dest + type_desc->fields[i].offset);
         if (sub_jz != NULL)
@@ -33,7 +32,8 @@ static bool deser_struct(const jzon_t jz, const jzon_type_desc_t *type_desc,
 bool jzon_deser(const jzon_t jz, const jzon_type_desc_t *type_desc,
     const jzon_deser_params_t *params, void *dest)
 {
-    if (type_desc->primitive != JZ_ANY && type_desc->primitive != jz->v->type)
+    if (type_desc->primitive != JZ_ANY &&
+        (jz == NULL || jz->v->type != type_desc->primitive))
         return (true);
     else if (type_desc->deser_func)
         return (type_desc->deser_func(jz, params, dest));
