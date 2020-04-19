@@ -48,6 +48,8 @@ struct jzon_type_desc {
     } fields[JZON_DESER_MAX_FIELD_COUNT];
 };
 
+extern const jzon_type_desc_t JZON_IS_SOME_TYPE_DESC;
+extern const jzon_type_desc_t JZON_IS_NONE_TYPE_DESC;
 extern const jzon_type_desc_t JZON_HASH_MAP_TYPE_DESC;
 extern const jzon_type_desc_t JZON_ARR_SIZE_TYPE_DESC;
 extern const jzon_type_desc_t JZON_HEAP_ARR_TYPE_DESC;
