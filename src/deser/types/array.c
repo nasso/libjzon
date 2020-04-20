@@ -17,11 +17,31 @@ static bool jzon_deser_arr_size(const jzon_t jz,
     return (false);
 }
 
+static bool jzon_deser_plain_arr(const jzon_t jz,
+    const jzon_deser_params_t *params, void *dest)
+{
+    void *arr = dest;
+
+    if (params->item_type->size == 0 || jzon_len(jz) > params->max_size ||
+        jzon_len(jz) < params->min_size)
+        return (true);
+    for (usize_t i = 0; i < jzon_len(jz); i++) {
+        if (jzon_deser(jzon_geti(jz, i), params->item_type, NULL,
+            ((char*) arr) + i * params->item_type->size)) {
+            my_free(arr);
+            return (true);
+        }
+    }
+    return (false);
+}
+
 static bool jzon_deser_heap_arr(const jzon_t jz,
     const jzon_deser_params_t *params, void *dest)
 {
     void **arr = dest;
 
+    if (params->item_type->size == 0)
+        return (true);
     *arr = my_malloc(jzon_len(jz) * params->item_type->size);
     if (*arr == NULL)
         return (true);
@@ -39,6 +59,12 @@ const jzon_type_desc_t JZON_ARR_SIZE_TYPE_DESC = {
     .primitive = JZ_ARR,
     .deser_func = &jzon_deser_arr_size,
     .size = sizeof(usize_t),
+};
+
+const jzon_type_desc_t JZON_PLAIN_ARR_TYPE_DESC = {
+    .primitive = JZ_ARR,
+    .deser_func = &jzon_deser_plain_arr,
+    .size = 0,
 };
 
 const jzon_type_desc_t JZON_HEAP_ARR_TYPE_DESC = {

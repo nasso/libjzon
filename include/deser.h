@@ -23,11 +23,14 @@
 typedef struct jzon_type_desc jzon_type_desc_t;
 
 typedef struct {
+    usize_t max_size;
+    usize_t min_size;
     const jzon_type_desc_t *item_type;
     struct {
         const char *str_val;
         i32_t enum_val;
     } str_enum[JZON_DESER_MAX_ENUM_SIZE];
+    void *user_data;
 } jzon_deser_params_t;
 
 typedef bool (jzon_deser_fn_t)(const jzon_t jz,
@@ -52,6 +55,7 @@ extern const jzon_type_desc_t JZON_IS_SOME_TYPE_DESC;
 extern const jzon_type_desc_t JZON_IS_NONE_TYPE_DESC;
 extern const jzon_type_desc_t JZON_HASH_MAP_TYPE_DESC;
 extern const jzon_type_desc_t JZON_ARR_SIZE_TYPE_DESC;
+extern const jzon_type_desc_t JZON_PLAIN_ARR_TYPE_DESC;
 extern const jzon_type_desc_t JZON_HEAP_ARR_TYPE_DESC;
 extern const jzon_type_desc_t JZON_ENUM_TYPE_DESC;
 extern const jzon_type_desc_t JZON_STR_TYPE_DESC;

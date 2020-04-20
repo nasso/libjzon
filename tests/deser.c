@@ -5,6 +5,7 @@
 ** JZON deserializer tests
 */
 
+#include <criterion/assert.h>
 #include <criterion/criterion.h>
 #include "my/my.h"
 #include "jzon/jzon.h"
@@ -16,6 +17,7 @@ static const char *SAMPLE_MAP =
     "   \"type\": \"map\","
     "   \"epic\": true,"
     "   \"opt_int\": 46,"
+    "   \"fixed_array\": [1, 2, 3, 4],"
     "   \"layers\": ["
     "       {"
     "           \"size\": {\"width\": 4, \"height\": 2},"
@@ -35,6 +37,11 @@ static const char *SAMPLE_MAP =
     "       {\"dog\": \"bark\", \"cat\": \"meow\"}"
     "   ]"
     "}";
+
+static const u64_t TILES_1[8] = {5, 3, 8, 4, 9, 6, 2, 7};
+static const u64_t TILES_2[9] = {9, 5, 3, 8, 4, 6, 2, 8, 5};
+static const u64_t TILES_3[10] = {7, 5, 8, 6, 3, 5, 1, 8, 2, 5};
+static const u32_t FIXED_ARRAY[4] = {1, 2, 3, 4};
 
 enum type {
     TYPE_TILESET,
@@ -58,6 +65,7 @@ struct map {
     OPT(i32) opt_int2;
     bool true_by_default;
     enum type type;
+    u32_t fixed_array[4];
     struct layer *layers;
     usize_t layer_count;
     hash_map_t **properties;
@@ -168,6 +176,14 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
             .optional = true,
         },
         {
+            .match = ".fixed_array",
+            .offset = offsetof(struct map, fixed_array),
+            .type = &JZON_PLAIN_ARR_TYPE_DESC,
+            .params.max_size = 4,
+            .params.min_size = 4,
+            .params.item_type = &JZON_U32_TYPE_DESC,
+        },
+        {
             .match = ".layers",
             .offset = offsetof(struct map, layers),
             .type = &JZON_HEAP_ARR_TYPE_DESC,
@@ -206,31 +222,36 @@ Test(deser, map)
     cr_assert_eq(map.type, TYPE_MAP);
 }
 
-Test(deser, arrays)
+Test(deser, plain_array)
 {
     struct map map = {0};
-    static const u64_t TILES_1[] = {5, 3, 8, 4, 9, 6, 2, 7};
-    static const u64_t TILES_2[] = {9, 5, 3, 8, 4, 6, 2, 8, 5};
-    static const u64_t TILES_3[] = {7, 5, 8, 6, 3, 5, 1, 8, 2, 5};
 
-    cr_assert_not(jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map));
+    jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map);
+    cr_assert_arr_eq(map.fixed_array, FIXED_ARRAY, 4 * sizeof(u32_t));
+}
+
+Test(deser, heap_array_simple)
+{
+    struct map map = {0};
+
+    jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map);
     cr_assert_eq(map.layer_count, 3);
     cr_assert_eq(map.layers[0].size.width, 4);
     cr_assert_eq(map.layers[0].size.height, 2);
-    cr_assert_arr_eq(map.layers[0].tiles, TILES_1, 8);
+    cr_assert_arr_eq(map.layers[0].tiles, TILES_1, 8 * sizeof(u64_t));
     cr_assert_eq(map.layers[1].size.width, 3);
     cr_assert_eq(map.layers[1].size.height, 3);
-    cr_assert_arr_eq(map.layers[1].tiles, TILES_2, 9);
+    cr_assert_arr_eq(map.layers[1].tiles, TILES_2, 9 * sizeof(u64_t));
     cr_assert_eq(map.layers[2].size.width, 2);
     cr_assert_eq(map.layers[2].size.height, 5);
-    cr_assert_arr_eq(map.layers[2].tiles, TILES_3, 10);
+    cr_assert_arr_eq(map.layers[2].tiles, TILES_3, 10 * sizeof(u64_t));
 }
 
-Test(deser, arrays_complex)
+Test(deser, heap_array_complex)
 {
     struct map map = {0};
 
-    cr_assert_not(jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map));
+    jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map);
     cr_assert_eq(map.property_count, 2);
     cr_assert_not_null(map.properties[0]);
     cr_assert(hash_map_contains_key(map.properties[0], "goat"));
