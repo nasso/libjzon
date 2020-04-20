@@ -36,19 +36,25 @@ typedef struct {
 typedef bool (jzon_deser_fn_t)(const jzon_t jz,
     const jzon_deser_params_t *params, void *dest);
 
+typedef jzon_t (jzon_deser_default_fn_t)(const jzon_t jz,
+    const jzon_deser_params_t *params);
+
+typedef struct {
+    const char *match;
+    bool optional;
+    const char *default_json;
+    jzon_deser_default_fn_t *default_func;
+    usize_t offset;
+    const jzon_type_desc_t *type;
+    jzon_deser_params_t params;
+} jzon_deser_field_t;
+
 struct jzon_type_desc {
     jzon_type_t primitive;
     jzon_deser_fn_t *deser_func;
     usize_t size;
     bool is_ptr;
-    struct {
-        const char *match;
-        bool optional;
-        const char *default_json;
-        usize_t offset;
-        const jzon_type_desc_t *type;
-        jzon_deser_params_t params;
-    } fields[JZON_DESER_MAX_FIELD_COUNT];
+    jzon_deser_field_t fields[JZON_DESER_MAX_FIELD_COUNT];
 };
 
 extern const jzon_type_desc_t JZON_IS_SOME_TYPE_DESC;

@@ -60,6 +60,7 @@ struct layer {
 
 struct map {
     char *name;
+    char *default_is_name;
     bool epic;
     OPT(i32) opt_int;
     OPT(i32) opt_int2;
@@ -109,6 +110,14 @@ static const jzon_type_desc_t MAP_PROPERTY_TYPE_DESC = {
     },
 };
 
+static jzon_t default_is_name(const jzon_t mapjz,
+    const jzon_deser_params_t *params)
+{
+    (void)(params);
+    return (jzon_create_str(jzon_getk_str(mapjz, "name")));
+}
+
+
 static const jzon_type_desc_t MAP_TYPE_DESC = {
     .primitive = JZ_OBJ,
     .size = sizeof(struct map),
@@ -116,6 +125,12 @@ static const jzon_type_desc_t MAP_TYPE_DESC = {
         {
             .match = ".name",
             .offset = offsetof(struct map, name),
+            .type = &JZON_STR_TYPE_DESC,
+        },
+        {
+            .match = ".default_is_name",
+            .default_func = &default_is_name,
+            .offset = offsetof(struct map, default_is_name),
             .type = &JZON_STR_TYPE_DESC,
         },
         {
@@ -214,6 +229,7 @@ Test(deser, map)
 
     cr_assert_not(jzon_deser_cstr(SAMPLE_MAP, &MAP_TYPE_DESC, NULL, &map));
     cr_assert_str_eq(map.name, "Gay Zone");
+    cr_assert_str_eq(map.default_is_name, "Gay Zone");
     cr_assert(map.epic);
     cr_assert(map.true_by_default);
     cr_assert(map.opt_int.is_some);
