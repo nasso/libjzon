@@ -60,4 +60,3 @@ bool jzon_deser_reader(bufreader_t *reader, const jzon_type_desc_t *type_desc,
     jzon_drop(jz);
     return (err);
 }
-

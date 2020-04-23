@@ -20,14 +20,19 @@ static bool jzon_deser_arr_size(const jzon_t jz,
 static bool jzon_deser_plain_arr(const jzon_t jz,
     const jzon_deser_params_t *params, void *dest)
 {
+    jzon_t element = NULL;
+    bool err = false;
     void *arr = dest;
 
     if (params->item_type->size == 0 || jzon_len(jz) > params->max_size ||
         jzon_len(jz) < params->min_size)
         return (true);
     for (usize_t i = 0; i < jzon_len(jz); i++) {
-        if (jzon_deser(jzon_geti(jz, i), params->item_type, NULL,
-            ((char*) arr) + i * params->item_type->size)) {
+        element = jzon_geti(jz, i);
+        err = jzon_deser(element, params->item_type, NULL,
+            ((char*) arr) + i * params->item_type->size);
+        jzon_drop(element);
+        if (err) {
             my_free(arr);
             return (true);
         }
@@ -38,6 +43,8 @@ static bool jzon_deser_plain_arr(const jzon_t jz,
 static bool jzon_deser_heap_arr(const jzon_t jz,
     const jzon_deser_params_t *params, void *dest)
 {
+    jzon_t element = NULL;
+    bool err = false;
     void **arr = dest;
 
     if (params->item_type->size == 0)
@@ -46,8 +53,11 @@ static bool jzon_deser_heap_arr(const jzon_t jz,
     if (*arr == NULL)
         return (true);
     for (usize_t i = 0; i < jzon_len(jz); i++) {
-        if (jzon_deser(jzon_geti(jz, i), params->item_type, NULL,
-            ((char*) *arr) + i * params->item_type->size)) {
+        element = jzon_geti(jz, i);
+        err = jzon_deser(element, params->item_type, NULL,
+            ((char*) *arr) + i * params->item_type->size);
+        jzon_drop(element);
+        if (err) {
             my_free(arr);
             return (true);
         }
