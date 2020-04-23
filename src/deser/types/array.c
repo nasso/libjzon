@@ -42,7 +42,7 @@ static bool jzon_deser_heap_arr(const jzon_t jz,
 
     if (params->item_type->size == 0)
         return (true);
-    *arr = my_malloc(jzon_len(jz) * params->item_type->size);
+    *arr = my_calloc(jzon_len(jz), params->item_type->size);
     if (*arr == NULL)
         return (true);
     for (usize_t i = 0; i < jzon_len(jz); i++) {
