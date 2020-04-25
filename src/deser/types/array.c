@@ -58,7 +58,7 @@ static bool jzon_deser_heap_arr(const jzon_t jz,
             ((char*) *arr) + i * params->item_type->size);
         jzon_drop(element);
         if (err) {
-            my_free(arr);
+            my_free(*arr);
             return (true);
         }
     }
