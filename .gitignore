@@ -7,9 +7,9 @@
 # Makefile dependencies
 *.d
 
-# Libraries
+# Libraries/dependencies
 *.a
-/lib/include
+lib
 
 # Object files
 *.o
@@ -20,9 +20,8 @@
 
 # Executables
 *.out
-/target
-/libjzon.a
-/unit-tests
+libjzon.a
+unit_tests
 
 # Coverage reports
 *.gcda
