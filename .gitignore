@@ -9,7 +9,6 @@
 
 # Libraries/dependencies
 *.a
-lib
 
 # Object files
 *.o
